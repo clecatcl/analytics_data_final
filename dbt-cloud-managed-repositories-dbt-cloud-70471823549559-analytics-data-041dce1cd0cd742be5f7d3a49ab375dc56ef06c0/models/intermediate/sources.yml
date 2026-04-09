@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+
+  - name: local_bike
+    description: Raw source data for the Local Bike analytics project
+
+    tables:
+      - name: brands
+        description: Raw brands data
+
+      - name: categories
+        description: Raw product categories data
+
+      - name: customers
+        description: Raw customers data including personal and address information
+
+      - name: orders
+        description: Raw orders data including order status and dates
+
+      - name: order_items
+        description: Raw order items data with product, quantity, price, and discount
+
+      - name: products
+        description: Raw products data with brand, category, and pricing information
+
+      - name: staffs
+        description: Raw staff data including store assignment and activity status
+
+      - name: stores
+        description: Raw stores data including address and contact information

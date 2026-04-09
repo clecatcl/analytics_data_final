@@ -1,0 +1,178 @@
+version: 2
+
+models:
+  - name: stg_local_bike__brands
+    description: "Cleaned table of brands ready for transformations"
+    columns:
+      - name: brand_id
+        description: "Unique identifier for the brand"
+        tests:
+          - unique
+          - not_null
+      - name: brand_name
+        description: "Name of the brand"
+        tests:
+          - not_null
+
+  - name: stg_local_bike__categories
+    description: "Cleaned table of categories ready for transformations"
+    columns:
+      - name: category_id
+        description: "Unique identifier for the category"
+        tests:
+          - unique
+          - not_null
+      - name: category_name
+        description: "Name of the category"
+        tests:
+          - not_null
+
+  - name: stg_local_bike__customers
+    description: "Cleaned table of customers ready for transformations"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for the customer"
+        tests:
+          - unique
+          - not_null
+      - name: first_name
+        description: "Customer's first name"
+      - name: last_name
+        description: "Customer's last name"
+      - name: phone
+        description: "Customer's phone number"
+      - name: email
+        description: "Customer's email"
+      - name: street
+        description: "Customer's street address"
+      - name: city
+        description: "Customer's city"
+      - name: state
+        description: "Customer's state or region"
+      - name: zip_code
+        description: "Customer's zip code"
+
+  - name: stg_local_bike__orders
+    description: "Cleaned table of orders ready for transformations"
+    columns:
+      - name: order_id
+        description: "Unique identifier for the order"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Customer identifier"
+        tests:
+          - relationships:
+              config:
+                severity: error
+              arguments:
+                to: ref('stg_local_bike__customers')
+                field: customer_id
+      - name: order_status
+        description: "Raw order status"
+      - name: order_status_label
+        description: "Human-readable order status"
+      - name: order_date
+        description: "Order date"
+      - name: required_date
+        description: "Requested delivery date"
+      - name: shipped_date
+        description: "Shipped date"
+      - name: store_id
+        description: "Store identifier"
+      - name: staff_id
+        description: "Staff identifier handling the order"
+        tests:
+          - relationships:
+              config:
+                severity: error
+              arguments:
+                to: ref('stg_local_bike__staffs')
+                field: staff_id
+      - name: delivery_days
+        description: "Number of days to deliver the order"
+
+  - name: stg_local_bike__order_items
+    description: "Detailed table of order items"
+    columns:
+      - name: order_id
+        description: "Order identifier"
+        tests:
+          - relationships:
+              config:
+                severity: error
+              arguments:
+                to: ref('stg_local_bike__orders')
+                field: order_id
+      - name: item_id
+        description: "Order line identifier"
+      - name: product_id
+        description: "Ordered product identifier"
+        tests:
+          - relationships:
+              config:
+                severity: error
+              arguments:
+                to: ref('stg_local_bike__products')
+                field: product_id
+      - name: quantity
+        description: "Quantity ordered"
+      - name: list_price
+        description: "Unit price"
+      - name: discount
+        description: "Discount applied"
+
+  - name: stg_local_bike__products
+    description: "Table of products"
+    columns:
+      - name: product_id
+        description: "Unique identifier for the product"
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Product name"
+      - name: brand
+        description: "Brand identifier"
+        tests:
+          - relationships:
+              config:
+                severity: error
+              arguments:
+                to: ref('stg_local_bike__brands')
+                field: brand_id
+      - name: category
+        description: "Category identifier"
+        tests:
+          - relationships:
+              config:
+                severity: error
+              arguments:
+                to: ref('stg_local_bike__categories')
+                field: category_id
+      - name: model_year
+        description: "Model year of the product"
+      - name: list_price
+        description: "Product price"
+
+  - name: stg_local_bike__staffs
+    description: "Table of staff members"
+    columns:
+      - name: staff_id
+        description: "Unique identifier for the staff member"
+        tests:
+          - unique
+          - not_null
+      - name: first_name
+        description: "First name of the staff member"
+      - name: last_name
+        description: "Last name of the staff member"
+      - name: email
+        description: "Email of the staff member"
+      - name: store_id
+        description: "Store assigned to the staff member"
+      - name: active
+        description: "Active status of the staff member"
+   
+      

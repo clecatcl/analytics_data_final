@@ -1,0 +1,139 @@
+version: 2
+
+models:
+
+  - name: mrt_local_bike__customers
+    description: Aggregated customer metrics for BI reporting
+    columns:
+      - name: customer_id
+        description: Unique identifier of the customer
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__customers')
+                field: customer_id
+      - name: first_name
+      - name: last_name
+      - name: city
+      - name: state
+      - name: total_revenue
+      - name: total_orders
+      - name: total_quantity
+      - name: first_order_date
+      - name: last_order_date
+
+  - name: mrt_local_bike__products
+    description: Aggregated product metrics for BI reporting
+    columns:
+      - name: product_id
+        description: Unique identifier of the product
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__products')
+                field: product_id
+      - name: product_name
+      - name: brand
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__brands')
+                field: brand_id
+      - name: category
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__categories')
+                field: category_id
+      - name: model_year
+      - name: list_price
+      - name: total_quantity_sold
+      - name: total_revenue
+      - name: avg_discount
+      - name: total_orders
+      - name: first_sale_date
+      - name: last_sale_date
+      - name: is_premium
+
+  - name: mrt_local_bike__orders
+    description: Aggregated order metrics
+    columns:
+      - name: order_id
+        description: Unique identifier of the order
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__order_items')
+                field: order_id
+      - name: customer_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__customers')
+                field: customer_id
+      - name: store_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__stores')
+                field: store_id
+      - name: staff_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__staffs')
+                field: staff_id
+      - name: total_quantity
+      - name: total_revenue
+      - name: net_revenue
+      - name: delivery_days
+
+  - name: mrt_local_bike__staffs
+    description: Staff metrics for BI reporting
+    columns:
+      - name: staff_id
+        description: Unique identifier of staff
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__staffs')
+                field: staff_id
+      - name: first_name
+      - name: last_name
+      - name: email
+      - name: store_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__stores')
+                field: store_id
+      - name: active
+      - name: total_orders_handled
+      - name: total_revenue_handled
+
+  - name: mrt_local_bike__stores
+    description: Store metrics for BI reporting
+    columns:
+      - name: store_id
+        description: Unique identifier of the store
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('int_local_bike__stores')
+                field: store_id
+      - name: store_name
+      - name: city
+      - name: state
+      - name: total_orders
+      - name: total_revenue
+      - name: total_customers

@@ -1,0 +1,51 @@
+name: 'analytics_data'
+version: '1.0.0'
+config-version: 2
+
+profile: 'default'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+
+  analytics_data:
+    +dataset: local_bike
+    +materialized: view
+
+  # Configuration des modèles de staging
+  staging:
+    +dataset: local_bike
+    +materialized: view
+
+    stg_local_bike__customers:
+      +materialized: view
+    stg_local_bike__orders:
+      +materialized: view
+    stg_local_bike__order_items:
+      +materialized: view
+    stg_local_bike__products:
+      +materialized: view
+    stg_local_bike__staffs:
+      +materialized: view
+    stg_local_bike__stores:
+      +materialized: view
+
+  # Configuration des modèles intermédiaires
+  intermediate:
+    +dataset: local_bike
+    +materialized: view
+
+  # Configuration des marts
+  marts:
+    +dataset: local_bike
+    +materialized: view

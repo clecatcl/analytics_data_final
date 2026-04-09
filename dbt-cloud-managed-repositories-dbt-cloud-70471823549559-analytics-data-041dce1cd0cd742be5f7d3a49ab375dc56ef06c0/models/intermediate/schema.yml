@@ -1,0 +1,135 @@
+version: 2
+
+models:
+
+  - name: int_local_bike__order_items
+    description: Intermediate table containing order items with revenue metrics
+    columns:
+      - name: order_id
+        description: Unique identifier of the order
+        tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__orders')
+                field: order_id
+      - name: item_id
+        description: Line item identifier
+        tests:
+          - not_null
+      - name: product_id
+        description: Identifier of the ordered product
+        tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__products')
+                field: product_id
+      - name: customer_id
+        description: Identifier of the customer who placed the order
+        tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__customers')
+                field: customer_id
+      - name: store_id
+        description: Identifier of the store where the order was placed
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__stores')
+                field: store_id
+      - name: staff_id
+        description: Identifier of the staff handling the order
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__staffs')
+                field: staff_id
+      - name: quantity
+        description: Quantity ordered
+      - name: list_price
+        description: Unit price of the product
+      - name: discount
+        description: Discount applied to the line item
+      - name: gross_revenue
+        description: Calculated as quantity multiplied by list price
+      - name: net_revenue
+        description: Calculated as quantity multiplied by list price multiplied by (1 minus discount)
+      - name: delivery_days
+        description: Number of days between order and shipment
+
+  - name: int_local_bike__products
+    description: Intermediate table containing products with aggregated sales metrics
+    columns:
+      - name: product_id
+        description: Unique identifier of the product
+        tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__products')
+                field: product_id
+      - name: product_name
+        description: Name of the product
+      - name: brand
+        description: Brand identifier
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__brands')
+                field: brand_id
+      - name: category
+        description: Category identifier
+        tests:
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__categories')
+                field: category_id
+      - name: model_year
+        description: Product model year
+      - name: list_price
+        description: Unit price
+      - name: total_quantity_sold
+        description: Sum of quantities sold across all orders
+      - name: total_revenue
+        description: Sum of net revenue across all orders
+      - name: avg_discount
+        description: Average discount applied across all orders
+      - name: total_orders
+        description: Total number of orders containing the product
+      - name: first_sale_date
+        description: Date of the first sale of the product
+      - name: last_sale_date
+        description: Date of the last sale of the product
+
+  - name: int_local_bike__customers
+    description: Intermediate table containing customers with aggregated purchase metrics
+    columns:
+      - name: customer_id
+        description: Unique identifier of the customer
+        tests:
+          - not_null
+          - relationships:
+              arguments: 
+                to: ref('stg_local_bike__customers')
+                field: customer_id
+      - name: first_name
+        description: Customer first name
+      - name: last_name
+        description: Customer last name
+      - name: city
+        description: Customer city
+      - name: state
+        description: Customer state
+      - name: total_revenue
+        description: Sum of net revenue from all orders
+      - name: total_orders
+        description: Total number of orders placed
+      - name: total_quantity
+        description: Total quantity of products ordered
+      - name: first_order_date
+        description: Date of the customer's first order
+      - name: last_order_date
+        description: Date of the customer's last order
